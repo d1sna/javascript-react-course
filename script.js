@@ -4,7 +4,7 @@ let money = prompt("Ваш бюджет на месяц?"),
     answer2 = prompt("Во сколько обойдется?"),
     answer3 = prompt("Введите обязательную статью расходов в этом месяце"),
     answer4 = prompt("Во сколько обойдется?"),
-    budgetOfOne = 900 / 30;
+    budgetOfOne = money/30;
 
 console.log(budgetOfOne);
 
