@@ -3,9 +3,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     let infoHeaderItems = document.querySelectorAll('.info-header-tab'),
         info = document.querySelectorAll('.info-tabcontent'),
+        descriptionBtns = document.querySelectorAll('.description-btn'),
         a = 0;
 
     hideAnother();
+
+    for (let i = 0; i < descriptionBtns.length; i++) {
+        descriptionBtns[i].addEventListener('click', showModalWindow);
+    }
 
     for (let i = 0; i < infoHeaderItems.length; i++) {
         infoHeaderItems[i].addEventListener('click', () => {
@@ -83,4 +88,29 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
     setClock(deadline);
+
+    //modal
+
+    let more = document.querySelector('.more'),
+        overlay = document.querySelector('.overlay'),
+        close = document.querySelector('.popup-close');
+
+    console.log(more);
+
+    more.addEventListener('click', showModalWindow);
+    close.addEventListener('click', closeModalWindow);
+
+    function showModalWindow() {
+        overlay.style.display = 'block';
+        this.classList.add('more-splash');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModalWindow() {
+        overlay.style.display = 'none';
+        this.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    }
+
+
 });
