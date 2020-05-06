@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-    //tabs
+    // Tabs
 
     let infoHeaderItems = document.querySelectorAll('.info-header-tab'),
         info = document.querySelectorAll('.info-tabcontent'),
@@ -31,7 +31,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    //timer
+    // Timer
 
     let deadline = '2020-04-29';
 
@@ -89,13 +89,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     setClock(deadline);
 
-    //modal
+    // Modal
 
     let more = document.querySelector('.more'),
         overlay = document.querySelector('.overlay'),
         close = document.querySelector('.popup-close');
-
-    console.log(more);
 
     more.addEventListener('click', showModalWindow);
     close.addEventListener('click', closeModalWindow);
@@ -111,6 +109,90 @@ window.addEventListener('DOMContentLoaded', () => {
         this.classList.remove('more-splash');
         document.body.style.overflow = '';
     }
+
+    // Form
+
+    let message = {
+        loading: 'Загрузка...',
+        succes: 'Спасибо! Скоро мы с вами свяжемся',
+        failure: 'Извините, произошла ошибка.'
+    };
+
+    let form = document.querySelector('.main-form'),
+        statusMessage = document.createElement('div'),
+        inputs = form.getElementsByTagName('input');
+
+    console.log(inputs);
+
+    statusMessage.classList.add('status');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        let formData = new FormData(form),
+            request = new XMLHttpRequest(),
+            obj = {};
+        formData.forEach((value, key) => {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
+
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        request.send(json);
+
+        request.addEventListener('readystatechange', () => {
+            if (request.readyState < 4) {
+                statusMessage.textContent = message.loading;
+            } else if (request.readyState === 4) {
+                statusMessage.textContent = message.succes;
+            } else {
+                statusMessage.textContent = message.failure;
+            }
+        });
+
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].value = '';
+        }
+    });
+
+    let emailForm = document.getElementById('form'),
+        emailFormInputs = emailForm.getElementsByTagName('input');
+    console.log(emailForm);
+
+    emailForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        emailForm.appendChild(statusMessage);
+
+        let formData = new FormData(emailForm),
+            request = new XMLHttpRequest(),
+            obj = {};
+
+        formData.forEach((value, key) => {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
+        console.log(formData);
+
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        request.send(json);
+
+        request.addEventListener('readystatechange', () => {
+            if (request.readyState < 4) {
+                statusMessage.textContent = message.loading;
+            } else if (request.readyState === 4) {
+                statusMessage.textContent = message.succes;
+            } else {
+                statusMessage.textContent = message.failure;
+            }
+        });
+
+        for (let i = 0; i < emailFormInputs.length; i++) {
+            emailFormInputs[i].value = '';
+        }
+    });
 
 
 });

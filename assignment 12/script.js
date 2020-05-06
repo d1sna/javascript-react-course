@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     let insert = document.querySelector('.insert'),
-        square = new options(10, 10, '123', 15, 'Text');
+        square = new options(1000, 1000, '123', 15, 'Text');
 
     insert.appendChild(square.createDiv());
 
