@@ -119,80 +119,65 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     let form = document.querySelector('.main-form'),
-        statusMessage = document.createElement('div'),
-        inputs = form.getElementsByTagName('input');
-
-    console.log(inputs);
+        statusMessage = document.createElement('div');
 
     statusMessage.classList.add('status');
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         form.appendChild(statusMessage);
+        let request = new XMLHttpRequest(),
+            json = formDataToJSON(form);
 
-        let formData = new FormData(form),
-            request = new XMLHttpRequest(),
-            obj = {};
-        formData.forEach((value, key) => {
-            obj[key] = value;
-        });
-        let json = JSON.stringify(obj);
 
-        request.open('POST', 'server.php');
-        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        request.send(json);
-
-        request.addEventListener('readystatechange', () => {
-            if (request.readyState < 4) {
-                statusMessage.textContent = message.loading;
-            } else if (request.readyState === 4) {
-                statusMessage.textContent = message.succes;
-            } else {
-                statusMessage.textContent = message.failure;
-            }
-        });
-
-        for (let i = 0; i < inputs.length; i++) {
-            inputs[i].value = '';
-        }
+        postData(json, request)
+            .then(() => statusMessage.innerHTML = message.loading)
+            .then(() => statusMessage.innerHTML = message.succes)
+            .catch(() => statusMessage.textContent = message.failure)
+            .then(form.reset());
     });
 
-    let emailForm = document.getElementById('form'),
-        emailFormInputs = emailForm.getElementsByTagName('input');
-    console.log(emailForm);
+
+    let emailForm = document.querySelector('#form');
 
     emailForm.addEventListener('submit', (e) => {
         e.preventDefault();
         emailForm.appendChild(statusMessage);
 
-        let formData = new FormData(emailForm),
-            request = new XMLHttpRequest(),
-            obj = {};
+        let request = new XMLHttpRequest(),
+            json = formDataToJSON(emailForm);
 
-        formData.forEach((value, key) => {
-            obj[key] = value;
-        });
-        let json = JSON.stringify(obj);
-        console.log(formData);
-
-        request.open('POST', 'server.php');
-        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        request.send(json);
-
-        request.addEventListener('readystatechange', () => {
-            if (request.readyState < 4) {
-                statusMessage.textContent = message.loading;
-            } else if (request.readyState === 4) {
-                statusMessage.textContent = message.succes;
-            } else {
-                statusMessage.textContent = message.failure;
-            }
-        });
-
-        for (let i = 0; i < emailFormInputs.length; i++) {
-            emailFormInputs[i].value = '';
-        }
+        postData(json, request)
+            .then(() => statusMessage.innerHTML = message.loading)
+            .then(() => statusMessage.innerHTML = message.succes)
+            .catch(() => statusMessage.textContent = message.failure)
+            .then(emailForm.reset());
     });
 
+    function postData(data, request) {
+        return new Promise((resolve, reject) => {
+            request.open('POST', 'server.php');
+            request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
+            request.onreadystatechange = () => {
+                if (request.readyState < 4) {
+                    resolve();
+                } else if (request.readyState === 4 && request.status === 200) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            };
+            request.send(data);
+        });
+    }
+
+    function formDataToJSON(form) {
+        let formdata = new FormData(form),
+            obj = {};
+        formdata.forEach((value, key) => {
+            obj[key] = value;
+        });
+        return JSON.stringify(obj);
+    }
 });
