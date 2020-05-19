@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Timer
 
-    let deadline = '2020-04-29';
+    let deadline = '2020-05-20';
 
     function getDifferinceTime(endTime) {
         let total = Date.parse(endTime) - Date.parse(new Date()),
@@ -180,4 +180,89 @@ window.addEventListener('DOMContentLoaded', () => {
         });
         return JSON.stringify(obj);
     }
+
+    // Slider
+
+    let slideIndex = 0,
+        prevSlideDiv = document.querySelector('.prev'),
+        nextSlideDiv = document.querySelector('.next'),
+        dots = document.querySelectorAll('.dot'),
+        sliderItems = document.querySelectorAll('.slider-item');
+
+    showSlide(slideIndex);
+
+    function showSlide(i) {
+
+        if (i > sliderItems.length - 1) {
+            slideIndex = 0;
+        }
+        if (i < 0) {
+            slideIndex = sliderItems.length - 1;
+        }
+
+        sliderItems.forEach((item) => item.style.display = 'none');
+        dots.forEach(item => item.classList.remove('dot-active'));
+
+        sliderItems[slideIndex].style.display = 'block';
+        dots[slideIndex].classList.add('dot-active');
+    }
+
+    function nextSlide(i) {
+        showSlide(slideIndex += i);
+    }
+
+    prevSlideDiv.addEventListener('click', () => {
+        nextSlide(-1);
+    });
+
+    nextSlideDiv.addEventListener('click', () => {
+        nextSlide(+1);
+    });
+
+    dots.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            if (index !== slideIndex) {
+                showSlide(slideIndex = index);
+            } else {
+                nextSlide(1);
+            }
+        });
+    });
+
+    //Calculator
+
+    let persons = document.querySelectorAll('.counter-block-input')[0],
+        restDays = document.querySelectorAll('.counter-block-input')[1],
+        place = document.getElementById('select'),
+        totalValue = document.getElementById('total'),
+        total = 0,
+        rate = 1;
+
+    totalValue.innerText = 0;
+
+    persons.addEventListener('change', function () {
+        if (persons.value !== '' && restDays.value !== '') {
+            totalValue.innerText = (parseInt(persons.value) + parseInt(restDays.value)) * 1000 * rate;
+            total = totalValue.textContent;
+        } else {
+            totalValue.innerText = 0;
+        }
+    });
+
+    restDays.addEventListener('change', function () {
+        if (persons.value !== '' && restDays.value !== '') {
+            totalValue.innerText = (parseInt(persons.value) + parseInt(restDays.value)) * 1000 * rate;
+            total = totalValue.textContent;
+        } else {
+            totalValue.innerText = 0;
+        }
+    });
+
+    place.addEventListener('change', function () {
+        if (persons.value !== '' && restDays.value !== '') {
+            let a = total;
+            rate = this.options[this.selectedIndex].value;
+            totalValue.innerText = a * rate;
+        }
+    });
 });
