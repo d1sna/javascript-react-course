@@ -235,33 +235,43 @@ window.addEventListener('DOMContentLoaded', () => {
         restDays = document.querySelectorAll('.counter-block-input')[1],
         place = document.getElementById('select'),
         totalValue = document.getElementById('total'),
+        personsValue = '',
+        restDaysValue = '',
         total = 0,
         rate = 1;
 
     totalValue.innerText = 0;
 
     persons.addEventListener('change', function () {
-        if (persons.value !== '' && restDays.value !== '') {
-            totalValue.innerText = (parseInt(persons.value) + parseInt(restDays.value)) * 1000 * rate;
-            total = totalValue.textContent;
+        if (!isNaN(parseInt(persons.value))) {
+            personsValue = parseInt(persons.value);
+        }
+
+        if (personsValue !== '' && restDaysValue !== '') {
+            total = (personsValue + restDaysValue) * 1000 * rate;
         } else {
             totalValue.innerText = 0;
         }
+        totalValue.textContent = total;
     });
 
     restDays.addEventListener('change', function () {
-        if (persons.value !== '' && restDays.value !== '') {
-            totalValue.innerText = (parseInt(persons.value) + parseInt(restDays.value)) * 1000 * rate;
-            total = totalValue.textContent;
+        if (!isNaN(parseInt(restDays.value))) {
+            restDaysValue = parseInt(restDays.value);
+        }
+
+        if (personsValue !== '' && restDaysValue !== '') {
+            total = (personsValue + restDaysValue) * 1000 * rate;
         } else {
             totalValue.innerText = 0;
         }
+        totalValue.textContent = total;
     });
 
     place.addEventListener('change', function () {
+        rate = this.options[this.selectedIndex].value;
         if (persons.value !== '' && restDays.value !== '') {
             let a = total;
-            rate = this.options[this.selectedIndex].value;
             totalValue.innerText = a * rate;
         }
     });
