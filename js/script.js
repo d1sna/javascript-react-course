@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Timer
 
-    let deadline = '2020-05-20';
+    let deadline = '2020-07-20';
 
     function getDifferinceTime(endTime) {
         let total = Date.parse(endTime) - Date.parse(new Date()),
